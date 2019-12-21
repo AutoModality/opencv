@@ -66,6 +66,7 @@ CMAKE_FLAGS = \
 %:
 	dh $@ --with python2,python3,javahelper,jh_maven_repo_helper --parallel
 
+
 override_dh_clean:
 	rm -rvf modules/python/src2/hdr_parser.pyc
 	rm -rvf modules/java/generator/rst_parser.pyc
@@ -127,10 +128,14 @@ DTYPE = +dfsg
 VER  ?= $(subst $(DTYPE),,$(UVER))
 get-orig-source:
 	@echo "# OpenCV Downloading..."
-	uscan --no-conf --verbose --force-download --download-version $(VER) --no-symlink
-	@echo "# Packing..."
-	mk-origtargz --repack --compression xz -S $(DTYPE) -C .. ../opencv_$(VER).orig.tar.gz -v $(VER)
+	git clone -b $(UVER) https://github.com/opencv/opencv_contrib contrib
+#	uscan --no-conf --verbose --force-download --download-version $(VER) --no-symlink
+#	@echo "# Packing..."
+#	mk-origtargz --repack --compression xz -S $(DTYPE) -C .. ../opencv_$(VER).orig.tar.gz -v $(VER)
+#
+#	@echo "# OpenCV contrib Downloading..."
+#	uscan --no-conf --verbose --force-download --download-version $(VER) --no-symlink
+#	mk-origtargz --repack --compression xz -S $(DTYPE) -C .. ../opencv_$(VER).orig-contrib.tar.gz -v $(VER) -c contrib
+#
 
-	@echo "# OpenCV contrib Downloading..."
-	uscan --no-conf --verbose --force-download --download-version $(VER) --no-symlink
-	mk-origtargz --repack --compression xz -S $(DTYPE) -C .. ../opencv_$(VER).orig-contrib.tar.gz -v $(VER) -c contrib
+
