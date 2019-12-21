@@ -63,76 +63,20 @@ CMAKE_FLAGS = \
         -DOPENCV_EXTRA_MODULES_PATH="$(CURDIR)/contrib/modules" \
 	$(CMAKE_ARCH_FLAGS)
 
-#        -DCMAKE_C_FLAGS_RELEASE="$(CFLAGS)" \
-#        -DCMAKE_CXX_FLAGS_RELEASE="$(CXXFLAGS)" \
-#        -DCMAKE_EXE_LINKER_FLAGS_RELEASE="$(LDFLAGS)" \
-#        -DOPENCV_MATHJAX_RELPATH=/usr/share/javascript/mathjax/ \
-# -DCMAKE_INSTALL_PREFIX=/usr \
-# 	-DWITH_QT:BOOL=TRUE \
-# 	-DINSTALL_C_EXAMPLES=ON	\
-# 	-DINSTALL_PYTHON_EXAMPLES=ON	\
-# 	-DCMAKE_VERBOSE_MAKEFILE=ON \
-# 	-DWITH_FFMPEG=ON	\
-# 	-DWITH_GSTREAMER=OFF	\
-# 	-DWITH_GTK=ON	\
-# 	-DWITH_JASPER=OFF	\
-# 	-DWITH_JPEG=ON	\
-# 	-DWITH_PNG=ON	\
-# 	-DWITH_TIFF=ON	\
-# 	-DWITH_OPENEXR=ON \
-# 	-DWITH_PVAPI=ON	\
-# 	-DWITH_UNICAP=OFF	\
-# 	-DWITH_EIGEN=ON \
-# 	-DWITH_VTK=ON \
-# 	-DWITH_GDAL=ON \
-# 	-DWITH_GDCM=ON \
-# 	-DWITH_XINE=OFF	\
-# 	-DWITH_IPP=OFF \
-# 	-DBUILD_TESTS=OFF \
-# 	-DWITH_CUDA=ON \
-# -DOPENCV_MATHJAX_RELPATH=/usr/share/javascript/mathjax/ \
-# -DCMAKE_BUILD_TYPE=Release	\
-# -DBUILD_EXAMPLES=ON	\
-# -DINSTALL_C_EXAMPLES=ON	\
-# -DINSTALL_PYTHON_EXAMPLES=ON	\
-# -DWITH_FFMPEG=ON	\
-# -DWITH_GSTREAMER=OFF	\
-# -DWITH_GTK=ON	\
-# -DWITH_JASPER=OFF	\
-# -DWITH_JPEG=ON	\
-# -DWITH_PNG=ON	\
-# -DWITH_TIFF=ON	\
-# -DWITH_OPENEXR=ON \
-# -DWITH_PVAPI=ON	\
-# -DWITH_UNICAP=OFF	\
-# -DWITH_EIGEN=ON \
-# -DWITH_VTK=ON \
-# -DWITH_GDAL=ON \
-# -DWITH_GDCM=ON \
-# -DWITH_XINE=OFF	\
-# -DWITH_IPP=OFF \
-# -DBUILD_TESTS=OFF \
-# -DCMAKE_SKIP_RPATH=ON \
-# -DWITH_CUDA=ON \
-# -DENABLE_PRECOMPILED_HEADERS=OFF \
-# -DWITH_IPP=OFF \
-# -DWITH_QT:BOOL=TRUE \
-# -DWITH_CAROTENE=OFF \
-
 %:
 	dh $@ --with python2,python3,javahelper,jh_maven_repo_helper --parallel
 
 override_dh_clean:
-	# rm -rvf modules/python/src2/hdr_parser.pyc
-	# rm -rvf modules/java/generator/rst_parser.pyc
-	# rm -rvf modules/refman.rst
+	rm -rvf modules/python/src2/hdr_parser.pyc
+	rm -rvf modules/java/generator/rst_parser.pyc
+	rm -rvf modules/refman.rst
 	@echo "Not cleaning"
-	# dh_clean
-	# -rm -rvf modules/python/src2/__pycache__
+	dh_clean
+	-rm -rvf modules/python/src2/__pycache__
 
 override_dh_auto_clean:
-	# dh_auto_clean -B $(BUILDDIR)
-	# dh_auto_clean -B $(BUILDDIR)-statics
+	dh_auto_clean -B $(BUILDDIR)
+	dh_auto_clean -B $(BUILDDIR)-statics
 	@echo "Not cleaning"
 
 override_dh_auto_configure: configure_dyn configure_static
@@ -142,9 +86,9 @@ configure_dyn:
 		-DCMAKE_SHARED_LINKER_FLAGS_RELEASE="$(LDFLAGS)" \
 		-DBUILD_SHARED_LIBS=ON -DBUILD_DOCS=ON
 configure_static:
-	# dh_auto_configure -B $(BUILDDIR)-static \
-	# 	-- $(CMAKE_FLAGS) \
-	# 	-DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF
+	dh_auto_configure -B $(BUILDDIR)-static \
+	 	-- $(CMAKE_FLAGS) \
+	 	-DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF
 
 
 override_dh_auto_build: build_dyn  build_static
