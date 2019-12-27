@@ -31,7 +31,6 @@ endif
 
 CMAKE_FLAGS = \
         -DCMAKE_INSTALL_PREFIX=/usr \
-        -DCMAKE_INSTALL_LIBDIR="lib/$(DEB_HOST_MULTIARCH)" \
         -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_BUILD_TYPE=Release      \
         -DBUILD_EXAMPLES=ON     \
@@ -63,9 +62,11 @@ CMAKE_FLAGS = \
         -DOPENCV_EXTRA_MODULES_PATH="$(CURDIR)/contrib/modules" \
 	$(CMAKE_ARCH_FLAGS)
 
-%:
-	dh $@ --with python2,python3,javahelper,jh_maven_repo_helper --parallel
 
+
+%:
+	#dh $@ --with python2,python3,javahelper,jh_maven_repo_helper --parallel
+	dh $@ --with python2,python3 --parallel
 
 override_dh_clean:
 	rm -rvf modules/python/src2/hdr_parser.pyc
@@ -89,8 +90,11 @@ configure_dyn:
 configure_static:
 	dh_auto_configure -B $(BUILDDIR)-static \
 	 	-- $(CMAKE_FLAGS) \
-	 	-DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF
+	  	-DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DCMAKE_INSTALL_LIBDIR="lib/$(DEB_HOST_MULTIARCH)" \
 
+
+override_dh_shlibdeps:
+	@echo "Ignoring dh_shlibdeps"
 
 override_dh_auto_build: build_dyn  build_static
 build_dyn:
@@ -103,6 +107,7 @@ override_dh_auto_test:
 
 override_dh_auto_install:
 	dh_auto_install -B $(BUILDDIR)
+	dh_auto_install -B $(BUILDDIR)-static
 
 override_dh_install:
 	@echo "Not doing cmake modules stuff"	
