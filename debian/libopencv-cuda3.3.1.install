@@ -1,2 +1,2 @@
-usr/lib/x86_64-linux-gnu/libopencv_cuda*.a
-usr/lib/x86_64-linux-gnu/libopencv_cudev.a
+usr/lib/*/libopencv_cuda*.a
+usr/lib/*/libopencv_cudev.a

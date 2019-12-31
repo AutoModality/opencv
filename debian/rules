@@ -72,13 +72,12 @@ override_dh_clean:
 	rm -rvf modules/python/src2/hdr_parser.pyc
 	rm -rvf modules/java/generator/rst_parser.pyc
 	rm -rvf modules/refman.rst
-	@echo "Not cleaning"
 	dh_clean
 	-rm -rvf modules/python/src2/__pycache__
 
 override_dh_auto_clean:
-	dh_auto_clean -B $(BUILDDIR)
-	dh_auto_clean -B $(BUILDDIR)-statics
+#	dh_auto_clean -B $(BUILDDIR)#
+#	dh_auto_clean -B $(BUILDDIR)-statics
 	@echo "Not cleaning"
 
 override_dh_auto_configure: configure_dyn configure_static
@@ -111,14 +110,22 @@ override_dh_auto_install:
 
 override_dh_install:
 	@echo "Not doing cmake modules stuff"	
-	# change install path of java library
+	@echo "Cleaning the docs first"
+	rm -rf debian/opencv-doc
+# change install path of java library
 	sed -i -e "s@share\/OpenCV\/java\/@lib\/jni\/@g" \
 	debian/tmp/usr/share/OpenCV/OpenCVModules-release.cmake
-	# put the static libs together with the rest of the stuff
+# put the static libs together with the rest of the stuff
 	mkdir -p debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
 	cp -v $(BUILDDIR)-static/lib/*.a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
 	rm -vrf debian/tmp/usr/share/OpenCV/doc/html/jquery.js
 	find debian/tmp -type d -empty -delete
+	rm -f debian/tmp/usr/share/OpenCV/3rdparty/lib/libnumeric.a
+	rm -f debian/tmp/usr/share/OpenCV/3rdparty/lib/libcorrespondence.a
+	rm -f debian/tmp/usr/share/OpenCV/3rdparty/lib/libmultiview.a
+	rm -f debian/tmp/usr/lib/aarch64-linux-gnu/libcorrespondence.a
+	rm -f debian/tmp/usr/lib/aarch64-linux-gnu/libnumeric.a
+	rm -f debian/tmp/usr/lib/aarch64-linux-gnu/libmultiview.a
 	dh_install --fail-missing
 
 override_dh_gencontrol:

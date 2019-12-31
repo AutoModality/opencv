@@ -129,12 +129,12 @@ usr/include/opencv2/sfm/numeric.hpp
 usr/include/opencv2/sfm/triangulation.hpp
 usr/share/OpenCV/valgrind_3rdparty.supp
 usr/share/OpenCV/valgrind.supp
-usr/share/OpenCV/3rdparty/lib/x86_64-linux-gnu/libmultiview.a
-usr/share/OpenCV/3rdparty/lib/x86_64-linux-gnu/libittnotify.a
-usr/share/OpenCV/3rdparty/lib/x86_64-linux-gnu/libnumeric.a
-usr/share/OpenCV/3rdparty/lib/x86_64-linux-gnu/libcorrespondence.a
-usr/share/OpenCV/3rdparty/lib/x86_64-linux-gnu/liblibprotobuf.a
-usr/lib/x86_64-linux-gnu/pkgconfig/opencv.pc
+usr/share/OpenCV/3rdparty/lib/*/libmultiview.a
+#usr/share/OpenCV/3rdparty/lib/*/libittnotify.a
+usr/share/OpenCV/3rdparty/lib/*/libnumeric.a
+usr/share/OpenCV/3rdparty/lib/*/libcorrespondence.a
+usr/share/OpenCV/3rdparty/lib/*/liblibprotobuf.a
+usr/lib/*/pkgconfig/opencv.pc
 
 
 usr/lib/libopencv_optflow.so.3.3
