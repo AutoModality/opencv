@@ -63,29 +63,33 @@ CMAKE_FLAGS = \
 	$(CMAKE_ARCH_FLAGS)
 
 
-
-%:
 	#dh $@ --with python2,python3,javahelper,jh_maven_repo_helper --parallel
+%:
 	dh $@ --with python2,python3 --parallel
 
 override_dh_clean:
 	rm -rvf modules/python/src2/hdr_parser.pyc
 	rm -rvf modules/java/generator/rst_parser.pyc
 	rm -rvf modules/refman.rst
+	rm -rf  $(BUILDDIR)
+	rm -rf  $(BUILDDIR)-static
 	dh_clean
 	-rm -rvf modules/python/src2/__pycache__
 
 override_dh_auto_clean:
-#	dh_auto_clean -B $(BUILDDIR)#
-#	dh_auto_clean -B $(BUILDDIR)-statics
-	@echo "Not cleaning"
+	dh_auto_clean -B $(BUILDDIR)
+	dh_auto_clean -B $(BUILDDIR)-statics
 
 override_dh_auto_configure: configure_dyn configure_static
+
 configure_dyn:
+	mkdir -p $(BUILDDIR)
+	git clone -b 3.3.1 https://github.com/opencv/opencv_contrib $(BUILDDIR)/contrib
 	dh_auto_configure -B $(BUILDDIR) \
 		-- $(CMAKE_FLAGS) \
 		-DCMAKE_SHARED_LINKER_FLAGS_RELEASE="$(LDFLAGS)" \
 		-DBUILD_SHARED_LIBS=ON -DBUILD_DOCS=ON
+
 configure_static:
 	dh_auto_configure -B $(BUILDDIR)-static \
 	 	-- $(CMAKE_FLAGS) \
@@ -123,9 +127,10 @@ override_dh_install:
 	rm -f debian/tmp/usr/share/OpenCV/3rdparty/lib/libnumeric.a
 	rm -f debian/tmp/usr/share/OpenCV/3rdparty/lib/libcorrespondence.a
 	rm -f debian/tmp/usr/share/OpenCV/3rdparty/lib/libmultiview.a
-	rm -f debian/tmp/usr/lib/aarch64-linux-gnu/libcorrespondence.a
-	rm -f debian/tmp/usr/lib/aarch64-linux-gnu/libnumeric.a
-	rm -f debian/tmp/usr/lib/aarch64-linux-gnu/libmultiview.a
+	rm -f debian/tmp/usr/lib/*/libcorrespondence.a
+	rm -f debian/tmp/usr/lib/*/libnumeric.a
+	rm -f debian/tmp/usr/lib/*/libmultiview.a
+	rm -f debian/tmp/usr/lib/*/libopencv_ts.a
 	dh_install --fail-missing
 
 override_dh_gencontrol:
