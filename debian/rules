@@ -29,7 +29,7 @@ endif
 # For Java
 #export JAVA_HOME=/usr/lib/jvm/default-java
 
-CMAKE_FLAGS = \
+CMAKE_DYN_FLAGS = \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_BUILD_TYPE=Release      \
@@ -59,9 +59,43 @@ CMAKE_FLAGS = \
         -DWITH_IPP=OFF \
         -DWITH_CAROTENE=OFF \
         -DOPENCL_INCLUDE_DIR:PATH="/usr/include/CL/" \
-        -DOPENCV_EXTRA_MODULES_PATH="$(CURDIR)/contrib/modules" \
+	-DCMAKE_SHARED_LINKER_FLAGS_RELEASE="$(LDFLAGS)" \
+	-DOPENCV_EXTRA_MODULES_PATH="$(CURDIR)/contrib/modules" \
+	-DBUILD_SHARED_LIBS=ON -DBUILD_DOCS=ON \
 	$(CMAKE_ARCH_FLAGS)
 
+CMAKE_STATIC_FLAGS = \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_BUILD_TYPE=Release      \
+        -DBUILD_EXAMPLES=ON     \
+        -DINSTALL_C_EXAMPLES=ON \
+        -DINSTALL_PYTHON_EXAMPLES=ON    \
+        -DWITH_FFMPEG=ON        \
+        -DWITH_GSTREAMER=OFF    \
+        -DWITH_GTK=ON   \
+        -DWITH_JASPER=OFF       \
+        -DWITH_JPEG=ON  \
+        -DWITH_PNG=ON   \
+        -DWITH_TIFF=ON  \
+        -DWITH_OPENEXR=ON \
+        -DWITH_PVAPI=ON \
+        -DWITH_UNICAP=OFF       \
+        -DWITH_EIGEN=ON \
+        -DWITH_VTK=ON \
+        -DWITH_GDAL=ON \
+        -DWITH_GDCM=ON \
+        -DWITH_XINE=OFF \
+        -DWITH_IPP=OFF \
+        -DBUILD_TESTS=OFF \
+        -DCMAKE_SKIP_RPATH=ON \
+        -DWITH_CUDA=ON \
+        -DENABLE_PRECOMPILED_HEADERS=OFF \
+        -DWITH_IPP=OFF \
+        -DWITH_CAROTENE=OFF \
+        -DOPENCL_INCLUDE_DIR:PATH="/usr/include/CL/" \
+	-DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DCMAKE_INSTALL_LIBDIR="lib/$(DEB_HOST_MULTIARCH)" \
+	$(CMAKE_ARCH_FLAGS)
 
 	#dh $@ --with python2,python3,javahelper,jh_maven_repo_helper --parallel
 %:
@@ -73,6 +107,7 @@ override_dh_clean:
 	rm -rvf modules/refman.rst
 	rm -rf  $(BUILDDIR)
 	rm -rf  $(BUILDDIR)-static
+	rm -rf $(CURDIR)/contrib
 	dh_clean
 	-rm -rvf modules/python/src2/__pycache__
 
@@ -85,15 +120,11 @@ override_dh_auto_configure: configure_dyn configure_static
 configure_dyn:
 	mkdir -p $(BUILDDIR)
 	git clone -b 3.3.1 https://github.com/opencv/opencv_contrib $(CURDIR)/contrib
-	dh_auto_configure -B $(BUILDDIR) \
-		-- $(CMAKE_FLAGS) \
-		-DCMAKE_SHARED_LINKER_FLAGS_RELEASE="$(LDFLAGS)" \
-		-DBUILD_SHARED_LIBS=ON -DBUILD_DOCS=ON
+	dh_auto_configure -B $(BUILDDIR) -- $(CMAKE_DYN_FLAGS)
+
 
 configure_static:
-	dh_auto_configure -B $(BUILDDIR)-static \
-	 	-- $(CMAKE_FLAGS) \
-	  	-DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DCMAKE_INSTALL_LIBDIR="lib/$(DEB_HOST_MULTIARCH)" \
+	dh_auto_configure -B $(BUILDDIR)-static -- $(CMAKE_STATIC_FLAGS)
 
 
 override_dh_shlibdeps:

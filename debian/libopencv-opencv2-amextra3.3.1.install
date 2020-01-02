@@ -52,8 +52,3 @@ usr/lib/libopencv_sfm.so
 usr/lib/libopencv_cudev.so.3.3
 usr/lib/libopencv_cudafeatures2d.so.3.3.1
 usr/lib/libopencv_xfeatures2d.so.3.3.1
-usr/lib/*/libopencv_dnn.a
-usr/lib/*/libopencv_img_hash.a
-usr/lib/*/libopencv_xfeatures2d.a
-usr/lib/*/libopencv_sfm.a
-usr/lib/*/libopencv_tracking.a
