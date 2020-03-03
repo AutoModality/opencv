@@ -6,9 +6,12 @@ on:
       - master
 jobs:
   build:
-    runs-on: ubuntu-16.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - name: Package
         run: |
-          apt-get update
+          mkdir build && cd build
+          cmake .. -DWITH_QT:BOOL=TRUE # The flags for Cuda and cuDNN will be automatically activated
+          make -j3 # Or a number that matches your number of your CPU's cores/threads
+          # The make takes a while
