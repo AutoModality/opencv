@@ -1,5 +1,7 @@
 ## OpenCV: Open Source Computer Vision Library
 
+![Story Development](https://github.com/AutoModality/opencv/workflows/Story%20Development/badge.svg)
+ 
 ### Resources
 
 * Homepage: <http://opencv.org>
