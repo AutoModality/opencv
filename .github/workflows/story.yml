@@ -1,0 +1,17 @@
+name: Story Development
+
+on:
+  push:
+    branches-ignore:
+      - master
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Package
+        run: |
+          mkdir build && cd build
+          cmake .. -DWITH_QT:BOOL=FALSE # The flags for Cuda and cuDNN will be automatically activated
+          make -j3 # Or a number that matches your number of your CPU's cores/threads
+          # The make takes a while
