@@ -12,6 +12,6 @@ jobs:
       - name: Package
         run: |
           mkdir build && cd build
-          cmake .. -DWITH_QT:BOOL=TRUE # The flags for Cuda and cuDNN will be automatically activated
+          cmake .. -DWITH_QT:BOOL=FALSE # The flags for Cuda and cuDNN will be automatically activated
           make -j3 # Or a number that matches your number of your CPU's cores/threads
           # The make takes a while
